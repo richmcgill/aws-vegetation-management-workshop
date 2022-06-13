@@ -1,9 +1,0 @@
-{
-"type": "FeatureCollection",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-                                                                                
-"features": [
-{ "type": "Feature", "properties": { "OBJECTID": 0, "FID_VEGAS_": 0, "Id": 0, "FID_Vegas": 0, "Name": "None", "AREA": 0.000000, "Shape_Leng": 0.000000, "Shape_Le_1": 0.000000, "SISL": 0.000000, "OBJECTID_1": 0, "Shape_Le_2": 0.000000, "Shape_Le_3": 0.000823, "Shape_Area": 0.000000, "partialBuilding": 1.000000, "partialDec": 0.077212 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -115.277156245999947, 36.235370587000034, 0.0 ], [ -115.277156245999947, 36.235352699943171, 0.0 ], [ -115.277296001999957, 36.235352699943171, 0.0 ], [ -115.277296001999957, 36.235370587000034, 0.0 ], [ -115.277156245999947, 36.235370587000034, 0.0 ] ] ] } },
-{ "type": "Feature", "properties": { "OBJECTID": 0, "FID_VEGAS_": 0, "Id": 0, "FID_Vegas": 0, "Name": "None", "AREA": 0.000000, "Shape_Leng": 0.000000, "Shape_Le_1": 0.000000, "SISL": 0.000000, "OBJECTID_1": 0, "Shape_Le_2": 0.000000, "Shape_Le_3": 0.000670, "Shape_Area": 0.000000, "partialBuilding": 1.000000, "partialDec": 0.008151 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -115.277674926999964, 36.235377613000026, 0.0 ], [ -115.277674926999964, 36.235352699943171, 0.0 ], [ -115.277682599940547, 36.235352699943171, 0.0 ], [ -115.277682599940547, 36.235377613000026, 0.0 ], [ -115.277674926999964, 36.235377613000026, 0.0 ] ] ] } }
-]
-}
