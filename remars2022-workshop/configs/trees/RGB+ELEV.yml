@@ -6,7 +6,7 @@ infer: true
 
 pretrained: false
 nn_framework: torch
-batch_size: 20 
+batch_size: 1 
 
 data_specs:
     width: 512
@@ -86,7 +86,7 @@ inference_augmentation:
     p: 1.0
 
 training:
-    epochs: 1000
+    epochs: 10
     optimizer: AdamW
     lr: 1e-4
     opt_args:
