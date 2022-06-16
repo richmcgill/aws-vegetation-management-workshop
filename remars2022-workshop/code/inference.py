@@ -139,7 +139,8 @@ def input_fn(request_body, request_content_type):
     my_array_data2 = io.BytesIO()
     s3_client.download_fileobj(BUCKET_NAME, BUCKET_FILE_NAME, my_array_data2)
     my_array_data2.seek(0)
-    data = pickle.load(my_array_data2)
+    global idx_refs, src_im_height, src_im_width
+    data, idx_refs, (src_im_height, src_im_width) = pickle.load(my_array_data2)
 
     data = torch.tensor(data, dtype=torch.float32, device=device)
     return data
@@ -173,7 +174,7 @@ def output_fn(subarr_preds, content_type):
 
     # upload without using disk
     my_array_data = io.BytesIO()
-    pickle.dump(subarr_preds, my_array_data)
+    pickle.dump([subarr_preds,idx_refs, src_im_height, src_im_width] , my_array_data)
     my_array_data.seek(0)
     OUTPUT_FILE = "/".join(path_parts[:-1]) + '/output_pred.pkl'
     s3_client.upload_fileobj(my_array_data, BUCKET_NAME, OUTPUT_FILE)
