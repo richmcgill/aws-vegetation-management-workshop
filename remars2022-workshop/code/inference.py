@@ -125,7 +125,7 @@ def model_fn(model_dir):
     
 # data preprocessing
 def input_fn(request_body, request_content_type):
-    assert request_content_type == "application/json"
+    # assert request_content_type == "application/json"
     
     # Get bucket name and file from the input path
     s3_path = json.loads(request_body)["inputs"]
@@ -170,7 +170,7 @@ def predict_fn(data, model):
 
 # postprocess
 def output_fn(subarr_preds, content_type):
-    assert content_type == "application/json"
+    # assert content_type == "application/json"
 
     # upload without using disk
     my_array_data = io.BytesIO()
