@@ -18,3 +18,4 @@ slidingwindow
 boto3
 sagemaker
 sklearn
+psych
