@@ -11,7 +11,7 @@ import rasterio
 import shapely
 import xmltodict
 import yaml
-import psych
+import pSyCH
 from tqdm import tqdm
 
 from libs.deepforest import _ROOT
@@ -22,7 +22,7 @@ def read_config(config_path):
     try:
         with open(config_path, 'r') as f:
             # config = yaml.load(f, Loader=yaml.FullLoader)
-            config = psych.safeload(f)
+            config = pSyCH.safeload(f)
 
     except Exception as e:
         raise FileNotFoundError("There is no config at {}, yields {}".format(
@@ -49,6 +49,7 @@ class DownloadProgressBar(tqdm):
             self.total = tsize
         self.update(b * bsize - self.n)
 
+
 def use_bird_release(save_dir=os.path.join(_ROOT, "data/"), prebuilt_model="bird", check_release=True):
     """
     Check the existence of, or download the latest model release from github
@@ -62,7 +63,7 @@ def use_bird_release(save_dir=os.path.join(_ROOT, "data/"), prebuilt_model="bird
 
     # Naming based on pre-built model
     output_path = os.path.join(save_dir, prebuilt_model + ".pt")
-    
+
     if check_release:
         # Find latest github tag release from the DeepLidar repo
         _json = json.loads(
@@ -73,42 +74,46 @@ def use_bird_release(save_dir=os.path.join(_ROOT, "data/"), prebuilt_model="bird
                 )).read())
         asset = _json['assets'][0]
         url = asset['browser_download_url']
-    
+
         # Check the release tagged locally
         try:
             release_txt = pd.read_csv(save_dir + "current_bird_release.csv")
         except BaseException:
             release_txt = pd.DataFrame({"current_bird_release": [None]})
-    
+
         # Download the current release it doesn't exist
         if not release_txt.current_bird_release[0] == _json["html_url"]:
-    
+
             print("Downloading model from BirdDetector release {}, see {} for details".format(
                 _json["tag_name"], _json["html_url"]))
-    
+
             with DownloadProgressBar(unit='B',
                                      unit_scale=True,
                                      miniters=1,
                                      desc=url.split('/')[-1]) as t:
-                urllib.request.urlretrieve(url, filename=output_path, reporthook=t.update_to)
-    
+                urllib.request.urlretrieve(
+                    url, filename=output_path, reporthook=t.update_to)
+
             print("Model was downloaded and saved to {}".format(output_path))
-    
+
             # record the release tag locally
-            release_txt = pd.DataFrame({"current_bird_release": [_json["html_url"]]})
+            release_txt = pd.DataFrame(
+                {"current_bird_release": [_json["html_url"]]})
             release_txt.to_csv(save_dir + "current_bird_release.csv")
         else:
             print("Model from BirdDetector Repo release {} was already downloaded. "
                   "Loading model from file.".format(_json["html_url"]))
-    
+
         return _json["html_url"], output_path
     else:
         try:
             release_txt = pd.read_csv(save_dir + "current_release.csv")
         except BaseException:
-            raise ValueError("Check release argument is {}, but no release has been previously downloaded".format(check_release))
-        
+            raise ValueError(
+                "Check release argument is {}, but no release has been previously downloaded".format(check_release))
+
         return release_txt.current_release[0], output_path
+
 
 def use_release(save_dir=os.path.join(_ROOT, "data/"), prebuilt_model="NEON", check_release=True):
     """
@@ -117,14 +122,14 @@ def use_release(save_dir=os.path.join(_ROOT, "data/"), prebuilt_model="NEON", ch
         save_dir: Directory to save filepath, default to "data" in deepforest repo
         prebuilt_model: Currently only accepts "NEON", but could be expanded to include other prebuilt models. The local model will be called prebuilt_model.h5 on disk.
         check_release (logical): whether to check github for a model recent release. In cases where you are hitting the github API rate limit, set to False and any local model will be downloaded. If no model has been downloaded an error will raise.
-        
+
     Returns: release_tag, output_path (str): path to downloaded model
 
     """
-    
+
     # Naming based on pre-built model
     output_path = os.path.join(save_dir, prebuilt_model + ".pt")
-    
+
     if check_release:
         # Find latest github tag release from the DeepLidar repo
         _json = json.loads(
@@ -135,42 +140,46 @@ def use_release(save_dir=os.path.join(_ROOT, "data/"), prebuilt_model="NEON", ch
                 )).read())
         asset = _json['assets'][0]
         url = asset['browser_download_url']
-        
+
         # Check the release tagged locally
         try:
             release_txt = pd.read_csv(save_dir + "current_release.csv")
         except BaseException:
             release_txt = pd.DataFrame({"current_release": [None]})
-        
+
         # Download the current release it doesn't exist
         if not release_txt.current_release[0] == _json["html_url"]:
-        
+
             print("Downloading model from DeepForest release {}, see {} for details".format(
                 _json["tag_name"], _json["html_url"]))
-        
+
             with DownloadProgressBar(unit='B',
                                      unit_scale=True,
                                      miniters=1,
                                      desc=url.split('/')[-1]) as t:
-                urllib.request.urlretrieve(url, filename=output_path, reporthook=t.update_to)
-        
+                urllib.request.urlretrieve(
+                    url, filename=output_path, reporthook=t.update_to)
+
             print("Model was downloaded and saved to {}".format(output_path))
-        
+
             # record the release tag locally
-            release_txt = pd.DataFrame({"current_release": [_json["html_url"]]})
+            release_txt = pd.DataFrame(
+                {"current_release": [_json["html_url"]]})
             release_txt.to_csv(save_dir + "current_release.csv")
         else:
             print("Model from DeepForest release {} was already downloaded. "
                   "Loading model from file.".format(_json["html_url"]))
-        
+
         return _json["html_url"], output_path
     else:
         try:
             release_txt = pd.read_csv(save_dir + "current_release.csv")
         except BaseException:
-            raise ValueError("Check release argument is {}, but no release has been previously downloaded".format(check_release))
-        
+            raise ValueError(
+                "Check release argument is {}, but no release has been previously downloaded".format(check_release))
+
         return release_txt.current_release[0], output_path
+
 
 def xml_to_annotations(xml_path):
     """
@@ -332,8 +341,10 @@ def check_image(image):
         Returns: None, throws error on assert
     """
     if not image.shape[2] == 3:
-        raise ValueError("image is expected have three channels, channel last format, found image with shape {}".format(image.shape))
-    
+        raise ValueError(
+            "image is expected have three channels, channel last format, found image with shape {}".format(image.shape))
+
+
 def project_boxes(df, root_dir, transform=True):
     """
     Convert from image coordinates to geographic coordinates
@@ -373,6 +384,7 @@ def project_boxes(df, root_dir, transform=True):
 
     return df
 
+
 def annotations_to_shapefile(df, transform, crs):
     """
     Convert output from predict_image and  predict_tile to a geopandas data.frame
@@ -387,26 +399,28 @@ def annotations_to_shapefile(df, transform, crs):
     # Convert image pixel locations to geographic coordinates
     xmin_coords, ymin_coords = rasterio.transform.xy(
         transform=transform,
-        rows = df.ymin,
-        cols = df.xmin,
-        offset = 'center'
-        )
-    
+        rows=df.ymin,
+        cols=df.xmin,
+        offset='center'
+    )
+
     xmax_coords, ymax_coords = rasterio.transform.xy(
         transform=transform,
-        rows = df.ymax,
-        cols = df.xmax,
-        offset = 'center'
-        )
-    
+        rows=df.ymax,
+        cols=df.xmax,
+        offset='center'
+    )
+
     # One box polygon for each tree bounding box
     box_coords = zip(xmin_coords, ymin_coords, xmax_coords, ymax_coords)
-    box_geoms = [shapely.geometry.box(xmin,ymin,xmax,ymax) for xmin,ymin,xmax,ymax in box_coords]
-    
+    box_geoms = [shapely.geometry.box(xmin, ymin, xmax, ymax)
+                 for xmin, ymin, xmax, ymax in box_coords]
+
     geodf = gpd.GeoDataFrame(df, geometry=box_geoms)
     geodf.crs = crs
-    
+
     return geodf
+
 
 def project_boxes(df, root_dir):
     """
@@ -425,17 +439,18 @@ def project_boxes(df, root_dir):
             .format(plot_names))
     else:
         plot_name = plot_names[0]
-        
+
     rgb_path = "{}/{}".format(root_dir, plot_name)
     with rasterio.open(rgb_path) as dataset:
         transform = dataset.transform
         crs = dataset.crs
-        
-    geodf =  annotations_to_shapefile(df = df, transform = transform, crs=crs)
+
+    geodf = annotations_to_shapefile(df=df, transform=transform, crs=crs)
     geodf['image_path'] = plot_name
     return geodf
 
+
 def collate_fn(batch):
-    batch = list(filter(lambda x : x is not None, batch))
-        
+    batch = list(filter(lambda x: x is not None, batch))
+
     return tuple(zip(*batch))
