@@ -11,7 +11,6 @@ import rasterio
 import shapely
 import xmltodict
 import yaml
-import pSyCH
 from tqdm import tqdm
 
 from libs.deepforest import _ROOT
@@ -21,8 +20,7 @@ def read_config(config_path):
     """Read config yaml file"""
     try:
         with open(config_path, 'r') as f:
-            # config = yaml.load(f, Loader=yaml.FullLoader)
-            config = pSyCH.safeload(f)
+            config = yaml.safe_load(f)
 
     except Exception as e:
         raise FileNotFoundError("There is no config at {}, yields {}".format(

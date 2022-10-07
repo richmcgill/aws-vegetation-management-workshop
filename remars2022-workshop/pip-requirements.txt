@@ -18,4 +18,3 @@ slidingwindow
 boto3
 sagemaker
 sklearn
-pSyCH
